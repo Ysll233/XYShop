@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pay;
 
+use App\Http\Controllers\Common\OrderApi;
 use App\Http\Controllers\Controller;
 use App\Models\Common\Pay;
 use App\Models\Good\Order;
@@ -47,7 +48,7 @@ class AlipayController extends Controller
                 $oid = $resData['out_trade_no'];
                 $order = Order::where('order_id',$oid)->first();
                 if ($order->paystatus == 0) {
-                    if (!$this->updateOrder($order,$paymod = '支付宝')) {
+                    if (!OrderApi::updateOrder($order,$paymod = '支付宝')) {
                         DB::rollback();
                         die('fail');
                     }

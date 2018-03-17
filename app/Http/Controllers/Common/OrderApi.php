@@ -130,7 +130,7 @@ class OrderApi
             Order::where('id',$order->id)->sharedLock()->update(['paystatus'=>1,'pay_name'=>$paymod,'paytime'=>date('Y-m-d H:i:s')]);
             // 如果是团购，执行团购完成的操作
             if ($order->prom_type == '2') {
-                if (!$this->updateTuan($order)) {
+                if (!static::updateTuan($order)) {
                     return false;
                 }
             }
@@ -144,7 +144,7 @@ class OrderApi
             return false;
         }
     }
-    private function updateTuan($order = '')
+    private static function updateTuan($order = '')
     {
         try {
             /*

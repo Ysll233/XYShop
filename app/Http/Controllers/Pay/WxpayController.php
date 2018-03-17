@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pay;
 
+use App\Http\Controllers\Common\OrderApi;
 use App\Http\Controllers\Controller;
 use App\Models\Common\Pay;
 use App\Models\Good\Order;
@@ -32,7 +33,7 @@ class WxpayController extends Controller
                     if (array_get($message, 'result_code') === 'SUCCESS' && $order->paystatus == '0') {
                         // 写入到日日志里方便查看
                         // 消费记录
-                        if (!$this->updateOrder($order,$paymod = '微信')) {
+                        if (!OrderApi::updateOrder($order,$paymod = '微信')) {
                             DB::rollback();
                             return $fail('通信失败，请稍后再通知我');
                         }
