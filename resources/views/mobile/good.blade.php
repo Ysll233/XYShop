@@ -96,13 +96,13 @@
     @endforeach
   </div>
   <!-- 店 -->
-  <section class="sec_dian bgc_f clearfix mt20 overh pd20">
-    <a href="{{ url('/') }}" class="s_d_logo f-l"><img src="{{ $sites['static']}}mobile/images/logo_s.png" width="180" height="60" alt=""></a>
-    <div class="s_d_info">
-      <h2><a href="{{ url('/') }}">ThinkPad京东官方旗舰店</a></h2>
-      <p><a href="{{ url('/') }}">最好的手机电脑官方商城</a></p>
-    </div>
-  </section>
+  {{--<section class="sec_dian bgc_f clearfix mt20 overh pd20">--}}
+    {{--<a href="{{ url('/') }}" class="s_d_logo f-l"><img src="{{ $sites['static']}}mobile/images/logo_s.png" width="180" height="60" alt=""></a>--}}
+    {{--<div class="s_d_info">--}}
+      {{--<h2><a href="{{ url('/') }}">ThinkPad京东官方旗舰店</a></h2>--}}
+      {{--<p><a href="{{ url('/') }}">最好的手机电脑官方商城</a></p>--}}
+    {{--</div>--}}
+  {{--</section>--}}
   <!-- 详情 -->
   <section class="clearfix overh sec_show pd20 bgc_f">
     {!! $good->content !!}

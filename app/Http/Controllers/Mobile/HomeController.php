@@ -34,12 +34,13 @@ class HomeController extends Controller
             $pos_id = 'home';
             $title = '首页';
             $wechat_js = app('wechat.official_account')->jssdk;
-            return view(cache('config')['theme'].'.index',compact('pos_id','title','wechat_js'));
+            return view(cache('config')['theme'] . '.index', compact('pos_id', 'title', 'wechat_js'));
         } catch (\Exception $e) {
             dd($e);
             return view('errors.404');
         }
     }
+
     /*
     * 商品分类列表
     */
@@ -48,49 +49,55 @@ class HomeController extends Controller
         try {
             $pos_id = 'catelist';
             // 所有一级分类
-            $one = GoodCate::where('parentid',0)->select('id','name','mobilename','thumb')->orderBy('sort','asc')->orderBy('id','asc')->get();
+            $one = GoodCate::where('parentid', 0)
+                ->select('id', 'name', 'mobilename', 'thumb')
+                ->orderBy('sort', 'asc')->orderBy('id', 'asc')
+                ->get();
             // 判断有没有传分类，没有传随机从二级里取几个
             if ($id == 0) {
-                $ids = $one->random(3)->pluck('id');
-                $cates = GoodCate::whereIn('parentid',$ids)->select('id','name','mobilename','thumb')->orderBy('sort','asc')->orderBy('id','asc')->get();
-            }
-            else
-            {
-                $cates = GoodCate::where('parentid',$id)->select('id','name','mobilename','thumb')->orderBy('sort','asc')->orderBy('id','asc')->get();
+                switch (count($one)) {
+                    case 0:$ids = $one->random(0)->pluck('id'); break;
+                    case 1:$ids = $one->random(1)->pluck('id');break;
+                    case 2:$ids = $one->random(2)->pluck('id');break;
+                    default: $ids = $one->random(3)->pluck('id');break;
+                }
+                $cates = GoodCate::whereIn('parentid', $ids)->select('id', 'name', 'mobilename', 'thumb')->orderBy('sort', 'asc')->orderBy('id', 'asc')->get();
+            } else {
+                $cates = GoodCate::where('parentid', $id)->select('id', 'name', 'mobilename', 'thumb')->orderBy('sort', 'asc')->orderBy('id', 'asc')->get();
             }
             $title = '商品分类';
-            return view(cache('config')['theme'].'.catelist',compact('pos_id','title','id','one','cates'));
+            return view(cache('config')['theme'] . '.catelist', compact('pos_id', 'title', 'id', 'one', 'cates'));
         } catch (\Exception $e) {
             dd($e);
             return view('errors.404');
         }
     }
+
     // 商品列表
-    public function getList(Request $req,$id = 0)
+    public function getList(Request $req, $id = 0)
     {
         try {
             // 找出来所有栏目ID
             if ($id == 0) {
                 $catids = GoodCate::pluck('id');
-            }
-            else
-            {
-                $catids = GoodCate::where('id',$id)->value('arrchildid');
+            } else {
+                $catids = GoodCate::where('id', $id)->value('arrchildid');
                 $catids = explode(',', $catids);
             }
-            $catname = $id == 0 ? '全部商品' : GoodCate::where('id',$id)->value('mobilename');
+            $catname = $id == 0 ? '全部商品' : GoodCate::where('id', $id)->value('mobilename');
             // 排序方式
             $sort = isset($req->sort) ? $req->sort : 'sort';
             $sc = isset($req->sc) ? $req->sc : 'desc';
-            $list = Good::whereIn('cate_id',$catids)->where('status',1)->select('id','title','shop_price','thumb','prom_type','is_new','is_pos','is_hot')->orderBy($sort,$sc)->orderBy('id','desc')->simplePaginate(20);
+            $list = Good::whereIn('cate_id', $catids)->where('status', 1)->select('id', 'title', 'shop_price', 'thumb', 'prom_type', 'is_new', 'is_pos', 'is_hot')->orderBy($sort, $sc)->orderBy('id', 'desc')->simplePaginate(20);
             $pos_id = 'home';
             $title = $catname;
-            return view(cache('config')['theme'].'.list',compact('pos_id','title','list','sort','sc'));
+            return view(cache('config')['theme'] . '.list', compact('pos_id', 'title', 'list', 'sort', 'sc'));
         } catch (\Exception $e) {
             dd($e);
             return view('errors.404');
         }
     }
+
     // 商品详情页面
     public function getGood($id = '')
     {
@@ -104,29 +111,30 @@ class HomeController extends Controller
             * 2，查出所有的规格ID对应的名字spec_item及spec内容
             * 3、循环出来所有的规格及规格值
             * */
-            $good_spec_ids = GoodSpecPrice::where('good_id',$id)->pluck('item_id')->toArray();
-            $good_spec_ids = explode('_',implode('_',$good_spec_ids));
-            $good_spec = GoodSpecItem::with(['goodspec'=>function($q){
-                            $q->select('id','name');
-                        }])->whereIn('id',$good_spec_ids)->get();
+            $good_spec_ids = GoodSpecPrice::where('good_id', $id)->pluck('item_id')->toArray();
+            $good_spec_ids = explode('_', implode('_', $good_spec_ids));
+            $good_spec = GoodSpecItem::with(['goodspec' => function ($q) {
+                $q->select('id', 'name');
+            }])->whereIn('id', $good_spec_ids)->get();
             $filter_spec = [];
             foreach ($good_spec as $k => $v) {
-                $filter_spec[$v->goodspec->name][] = ['item_id'=>$v->id,'item'=>$v->item];
+                $filter_spec[$v->goodspec->name][] = ['item_id' => $v->id, 'item' => $v->item];
             }
             // 查出第一个规格信息来，标红用的
-            $good_spec_price = GoodSpecPrice::where('good_id',$id)->get()->keyBy('item_id')->toJson();
+            $good_spec_price = GoodSpecPrice::where('good_id', $id)->get()->keyBy('item_id')->toJson();
             // 找出来可以用的优惠券
             $date = date('Y-m-d H:i:s');
-            $coupon = Coupon::where('starttime','<=',$date)->where('endtime','>=',$date)->where('delflag',1)->where('status',1)->orderBy('sort','desc')->orderBy('id','desc')->limit(3)->get();
+            $coupon = Coupon::where('starttime', '<=', $date)->where('endtime', '>=', $date)->where('delflag', 1)->where('status', 1)->orderBy('sort', 'desc')->orderBy('id', 'desc')->limit(3)->get();
             $title = $good->title;
             $keyword = $good->keyword;
             $describe = $good->describe;
-            return view(cache('config')['theme'].'.good',compact('title','keyword','describe','good','good_spec_price','filter_spec','coupon','wechat_js'));
+            return view(cache('config')['theme'] . '.good', compact('title', 'keyword', 'describe', 'good', 'good_spec_price', 'filter_spec', 'coupon', 'wechat_js'));
         } catch (\Exception $e) {
             // dd($e);
             return view('errors.404');
         }
     }
+
     // 搜索
     public function getSearch(Request $req)
     {
@@ -134,10 +142,10 @@ class HomeController extends Controller
             // 排序方式
             $sort = isset($req->sort) ? $req->sort : 'sort';
             $sc = isset($req->sc) ? $req->sc : 'desc';
-            $list = Good::where('title','like',"%".$req->key."%")->where('status',1)->select('id','title','shop_price','thumb','prom_type','is_new','is_pos','is_hot')->orderBy($sort,$sc)->orderBy('id','desc')->simplePaginate(20);
+            $list = Good::where('title', 'like', "%" . $req->key . "%")->where('status', 1)->select('id', 'title', 'shop_price', 'thumb', 'prom_type', 'is_new', 'is_pos', 'is_hot')->orderBy($sort, $sc)->orderBy('id', 'desc')->simplePaginate(20);
             $pos_id = 'home';
             $title = "搜索结果";
-            return view(cache('config')['theme'].'.list',compact('pos_id','title','list','sort','sc'));
+            return view(cache('config')['theme'] . '.list', compact('pos_id', 'title', 'list', 'sort', 'sc'));
         } catch (\Exception $e) {
             // dd($e);
             return view('errors.404');

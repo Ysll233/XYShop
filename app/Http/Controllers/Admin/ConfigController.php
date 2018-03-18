@@ -20,7 +20,7 @@ class ConfigController extends Controller
     	$data = $req->input('data');
     	Config::where('id',1)->update($data);
     	// 更新缓存
-    	Cache::forever('config',$data);
+    	Cache::forever('config', $data);
     	return $this->adminJson(1,'更新成功');
     }
 }
