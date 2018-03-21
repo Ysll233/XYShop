@@ -7,21 +7,30 @@
   @endcomponent
   <!-- 分类列表 -->
   <section class="clearfix list_cate overh">
+    <div class="box1">
+      <div class="wrap">
+        <ul>
+          <li>1移动端</li>
+          <li>2可滑动</li>
+          <li>3ie8以上</li>
+          <li>4</li>
+          <li>5</li>
+        </ul>
+      </div>
+    </div>
     <ul class="l_c_left bgc_f f-l">
-      @foreach($one as $o)
+      @foreach($cates as $o)
       <li @if($o->id == $id) class="active"@endif><a href="{{ url('catelist',['id'=>$o->id]) }}">{{ $o->mobilename }}</a></li>
       @endforeach
     </ul>
     <div class="l_c_right f-r pd20">
       <!-- ad -->
-      @foreach(app('tag')->ad(4,1,1) as $k => $c)
-        <a href="{{ $c->url }}"><img src="{{ $c->thumb }}" width="570" height="180" alt="{{ $c->title }}"></a>
-      @endforeach
+
       
       <!-- 按二级分类再循环 -->
       @foreach($cates as $c)
       <div class="pd20 mt20 bgc_f">
-        <h3 class="t3_cate">{{ $c->mobilename }}</h3>
+
         <ul class="l_c_subcate clearfix">
           @foreach(app('tag')->catelist($c->id,8) as $g)
           <li>
@@ -36,6 +45,30 @@
       @endforeach
     </div>
   </section>
+  <style>
+    .box1 {
+      overflow:hidden;
+      /* 超出隐藏滚动条 */
+      background-color:#fff;
+    }
+    .box1 .wrap {
+      /* 比里层元素高16px 为了隐藏滚动条*/
+      overflow-x:scroll;
+      /* 定义超出此盒子滚动 */
+      overflow-y:hidden;
+    }
+    .box1 .wrap ul {
+      width:640px;
+      display:flex;
+    }
+    .box1 .wrap ul li {
+      flex:1;
+      width:60px;
+      box-sizing:border-box;
+      padding: 10px;
+    }
+    .box1::-webkit-scrollbar {display:none}
+  </style>
   <!-- 底 -->
   @include('mobile.common.footer')
   <!-- 公用底 -->
