@@ -68,7 +68,6 @@ class HomeController extends Controller
             $title = '商品分类';
             return view(cache('config')['theme'] . '.catelist', compact('pos_id', 'title', 'id', 'one', 'cates'));
         } catch (\Exception $e) {
-            dd($e);
             return view('errors.404');
         }
     }

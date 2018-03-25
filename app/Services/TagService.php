@@ -95,7 +95,7 @@ class TagService
     }
 
     // 取商品分类列表
-    public function catelist($pid = 0,$num = 10,$ishome = 0,$ismenu = 0)
+    public function catelist($pid = 0, $num = 10, $ishome = 0,$ismenu = 0)
     {
         $goodcate = GoodCate::where('parentid',$pid)->where(function($q)use($ishome){
                         if ($ishome) {

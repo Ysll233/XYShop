@@ -19,6 +19,7 @@
        var uid = "{{ session('member')->id }}";
     </script>
     <script src="{{ $sites['static']}}mobile/js/com.js"></script>
+    @yield('css')
 </head>
 
 <body class="pr">
@@ -84,10 +85,6 @@
     })
     </script>
     @endif
-    
-
-    <!-- <script id="__bs_script__">
-      document.write("<script async src='http://www.xyshop.com:3000/browser-sync/browser-sync-client.js?v=2.18.13'><\/script>".replace("www.xyshop.com", location.hostname));
-      </script> -->
+    @yield('js')
 </body>
 </html>
