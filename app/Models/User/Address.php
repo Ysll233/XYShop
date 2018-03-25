@@ -6,6 +6,33 @@ use App\Models\Common\Area;
 use App\Models\Common\Community;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\User\Address
+ *
+ * @property int $id
+ * @property int $user_id 用户ID
+ * @property string|null $area 区域
+ * @property string $address 地址
+ * @property string $phone 电话
+ * @property string $people 联系人
+ * @property int $default 状态：1默认，0普通
+ * @property int $delflag 删除状态，1正常-1删除
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read mixed $areaname
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Good\Order[] $order
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereDelflag($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address wherePeople($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Address whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Address extends Model
 {
     // 送货地址

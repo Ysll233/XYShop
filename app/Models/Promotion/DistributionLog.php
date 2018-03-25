@@ -4,6 +4,30 @@ namespace App\Models\Promotion;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Promotion\DistributionLog
+ *
+ * @property int $id
+ * @property int $user_id 用户ID
+ * @property int $son_id 子级ID
+ * @property int $sun_id 孙级ID
+ * @property int $order_id 订单ID
+ * @property float $money 金额
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\User\User $son
+ * @property-read \App\Models\User\User $sun
+ * @property-read \App\Models\User\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereMoney($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereSonId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereSunId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Promotion\DistributionLog whereUserId($value)
+ * @mixin \Eloquent
+ */
 class DistributionLog extends Model
 {
     // 分成记录

@@ -49,22 +49,17 @@ class HomeController extends Controller
         try {
             $pos_id = 'catelist';
             // 所有一级分类
-            $one = GoodCate::where('parentid', 0)
-                ->select('id', 'name', 'mobilename', 'thumb')
+            $one = GoodCate::where('parentid', 0)->select('id', 'name', 'mobilename', 'thumb')
                 ->orderBy('sort', 'asc')->orderBy('id', 'asc')
                 ->get();
-            // 判断有没有传分类，没有传随机从二级里取几个
             if ($id == 0) {
-                switch (count($one)) {
-                    case 0:$ids = $one->random(0)->pluck('id'); break;
-                    case 1:$ids = $one->random(1)->pluck('id');break;
-                    case 2:$ids = $one->random(2)->pluck('id');break;
-                    default: $ids = $one->random(3)->pluck('id');break;
+                if ($one->isNotEmpty()) {
+                    $id = $one[0]->id;
                 }
-                $cates = GoodCate::whereIn('parentid', $ids)->select('id', 'name', 'mobilename', 'thumb')->orderBy('sort', 'asc')->orderBy('id', 'asc')->get();
             } else {
-                $cates = GoodCate::where('parentid', $id)->select('id', 'name', 'mobilename', 'thumb')->orderBy('sort', 'asc')->orderBy('id', 'asc')->get();
+
             }
+            $cates = GoodCate::where('parentid', $id)->select('id', 'name', 'mobilename', 'thumb')->orderBy('sort', 'asc')->orderBy('id', 'asc')->get();
             $title = '商品分类';
             return view(cache('config')['theme'] . '.catelist', compact('pos_id', 'title', 'id', 'one', 'cates'));
         } catch (\Exception $e) {
@@ -149,5 +144,10 @@ class HomeController extends Controller
             // dd($e);
             return view('errors.404');
         }
+    }
+
+    public function getCategoryGood(GoodCate $cate)
+    {
+        return ['success' => true, 'data' => Good::whereCateId($cate->id)->where('status', 1)->orderBy('sort', 'asc')->paginate(20)];
     }
 }

@@ -4,6 +4,21 @@ namespace App\Models\Common;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Common\Adpos
+ *
+ * @property int $id
+ * @property int $is_mobile 0:PC/1:MOB
+ * @property string $name 名称
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Adpos whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Adpos whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Adpos whereIsMobile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Adpos whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Adpos whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Adpos extends Model
 {
     // 广告位

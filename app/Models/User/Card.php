@@ -4,6 +4,30 @@ namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\User\Card
+ *
+ * @property int $id
+ * @property int $user_id 用户ID
+ * @property string $card_id 会员卡号
+ * @property string $card_pwd 会员卡密码
+ * @property float $price 金额
+ * @property int $status 状态，0未用 1已用
+ * @property string $init_time 使用时间
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\User\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereCardId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereCardPwd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereInitTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\Card whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Card extends Model
 {
     // 会员卡

@@ -4,6 +4,29 @@ namespace App\Models\Common;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Common\Type
+ *
+ * @property int $id
+ * @property int $parentid
+ * @property string $arrparentid
+ * @property int $child
+ * @property string $arrchildid
+ * @property string $name
+ * @property int $sort
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereArrchildid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereArrparentid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereChild($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereParentid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereSort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Common\Type whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Type extends Model
 {
     // 分类表

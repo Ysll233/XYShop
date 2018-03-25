@@ -4,6 +4,21 @@ namespace App\Models\Console;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Console\Log
+ *
+ * @property int $id
+ * @property int $admin_id
+ * @property string $user
+ * @property string $url
+ * @property string|null $created_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Console\Log whereAdminId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Console\Log whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Console\Log whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Console\Log whereUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Console\Log whereUser($value)
+ * @mixin \Eloquent
+ */
 class Log extends Model
 {
 	/**

@@ -8,6 +8,7 @@
     <meta name="description" content="{{ isset($describe) ? $describe : cache('config')['describe'] }}">
     <!-- Bootstrap -->
     <link href="{{ $sites['static']}}mobile/css/iconfont.css" rel="stylesheet">
+    <link href="{{url('css/style.css')}}" rel="stylesheet">
     <link href="{{ $sites['static']}}mobile/css/home.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="{{ $sites['static']}}common/js/lazyload.min.js"></script>

@@ -24,6 +24,7 @@ Route::group(['namespace' => 'Mobile','middleware'=>'member'],function(){
     Route::get('list/{id?}','HomeController@getList');
     // 商品页面
     Route::get('good/{id}','HomeController@getGood');
+    Route::get('category/good/{cate}','HomeController@getCategoryGood');
     // 抢购商品
     Route::get('timetobuy/{id}','TimetobuyController@getGood');
     // 团购商品

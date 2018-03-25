@@ -4,6 +4,15 @@ namespace App\Models\Good;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Good\PromGood
+ *
+ * @property int $good_id 用户ID
+ * @property int $prom_id 活动ID
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Good\PromGood whereGoodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Good\PromGood wherePromId($value)
+ * @mixin \Eloquent
+ */
 class PromGood extends Model
 {
     // 活动商品

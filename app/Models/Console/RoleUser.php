@@ -4,6 +4,15 @@ namespace App\Models\Console;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Console\RoleUser
+ *
+ * @property int $role_id
+ * @property int $user_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Console\RoleUser whereRoleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Console\RoleUser whereUserId($value)
+ * @mixin \Eloquent
+ */
 class RoleUser extends Model
 {
     // 不可以批量赋值的字段，为空则表示都可以

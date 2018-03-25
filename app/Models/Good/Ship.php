@@ -4,6 +4,11 @@ namespace App\Models\Good;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Good\Ship
+ *
+ * @mixin \Eloquent
+ */
 class Ship extends Model
 {
 	// 快递信息

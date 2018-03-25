@@ -5,6 +5,22 @@ namespace App\Models\Good;
 use App\Models\Good\GoodCate;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Good\GoodSpec
+ *
+ * @property int $id
+ * @property string $good_id 商品ID
+ * @property string $name 规格名称
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Good\GoodSpecItem[] $goodspecitem
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Good\GoodSpec whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Good\GoodSpec whereGoodId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Good\GoodSpec whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Good\GoodSpec whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Good\GoodSpec whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class GoodSpec extends Model
 {
     // 商品规格表
