@@ -6,7 +6,7 @@
 @section('content')
     @component('mobile.common.search',['issub'=>1])
     @endcomponent
-    <section class="clearfix list_cate overh">
+    <section class="clearfix list_cate overh" style="overflow-y:visible">
         <div class="top-category">
             <i>&larrhk;</i>
             <ul class="show-case-bar">
@@ -27,22 +27,8 @@
                 </li>
             @endforeach
         </ul>
-        <div class="md-product">
-            <ul class="product_ul">
-                <li class="product_li">
-                    <a href="#" class="product_link">
-                        <div class="product-info">
-                            <p class="product_title">绿鲜知 上海青 小油菜 约400g 火锅涮菜 新鲜蔬菜</p>
-                            <p><span class="iconfont">￥550</span>/1000克</p>
-                        </div>
-                        <img src="http://img10.360buyimg.com/n7/s230x230_jfs/t4297/120/375562832/241785/c162c78b/58b3c779Na1ec50a0.jpg!cc_230x230.jpg">
-                    </a>
-                    <div class="product-action">
-                        <button>+</button>
-                        <span>0</span>
-                        <button>-</button>
-                    </div>
-                </li>
+        <div class="md-product" style="height: 640px;overflow-y: auto;">
+            <ul class="product_ul" >
             </ul>
         </div>
     </section>
@@ -53,25 +39,61 @@
 
 @section('js')
     <script>
-        var products = null;
+        let products = null;
+        let sid = "{{ session()->getId() }}";
+        let categoryId = null;
+        let isLoadMore = false;
         $(document).ready(function () {
+            initCategoryGood();
             $('.show-case-bar').delegate('li', 'click', function (e) {
-                var li = e.target;
-                var id = li.getAttribute('data-id');
+                let li = e.target;
+                let id = li.getAttribute('data-id');
                 getCategoryGood(id);
             });
+            $('.product_ul').delegate('button', 'click', function (e) {
+                let el = $(e.target);
+                let type = el.attr('data-type');
+                switch (type) {
+                    case 'add': addBuyNum(el);break;
+                    case 'remove': removeBuyNum(el); break;
+                }
+            });
+            $('.md-product').scroll(function (e) {
+                let el = $(this);
+                let ul = $('.product_ul');
+                if (ul.height() - 10 < el.scrollTop() + el.height()) {
+                    if (isLoadMore === false) {
+                        console.info('bottom');
+                        isLoadMore = true;
+                        let page = products.current_page + 1;
+                        if (page > products.last_page ) return;
+                        $.get('/category/good/' + categoryId, {page: page}, function (res) {
+                            if (res.success !== true) return;
+                            addProduct(res.data);
+                            isLoadMore = false;
+                        });
+                    }
+                }
+            })
         });
+
+        function initCategoryGood () {
+            let id = $('.show-case-bar li:first-child').attr('data-id');
+            if (id !== null && id !== undefined) {
+                getCategoryGood(id);
+            }
+        }
 
         function getCategoryGood (id) {
             products = null;
             $.get('/category/good/' + id, function (res) {
                 if (res.success !== true) return;
                 addProduct(res.data);
+                categoryId = id;
             });
         }
 
         function addProduct (data) {
-            console.info(data);
             if (products === null) {
                 products = data;
             } else {
@@ -79,10 +101,65 @@
                 products.current_page = data.current_page;
                 products.last_page = data.last_page;
             }
-            var html = '';
+            let html = '';
             $.each(products.data, function (index, item) {
-                html += ''
+                html +=
+`<li class="product_li" data-id="${item.id}" data-price="${item.shop_price}">
+    <a class="product_link">
+        <div class="product-info">
+            <p class="product_title">${item.title}</p>
+            <p><span class="iconfont">￥${item.shop_price}</span>/${item.keyword}</p>
+        </div>
+        <img src="${item.thumb}">
+    </a>
+    <div class="product-action">
+        <button data-type="add">+</button>
+        <span>${item.num}</span>
+        <button data-type="remove">-</button>
+    </div>
+</li>`
             });
+            $('.product_ul').html(html)
+        }
+
+        function  addBuyNum (el) {
+            let span = el.next();
+            let num = parseInt(span.text());
+            if (isNaN(num)) {
+                num = 0;
+            }
+            num++;
+            let li = el.parents('li');
+            let gid = li.attr('data-id');
+            let price = li.attr('data-price');
+            addCartGood(gid, num, price, function () {
+                span.text(num);
+            });
+        }
+        function  removeBuyNum (el) {
+            let span = el.prev();
+            let num = parseInt(span.text());
+            if (isNaN(num)) {
+                num = 0;
+            }
+            if (num <= 0) {
+                return
+            }
+            num--;
+            span.text(num);
+        }
+
+        function addCartGood (gid, num, price, callback) {
+            $.post('/api/good/addcart', {
+                gid: gid,
+                spec_key: '',
+                num: num,
+                gp: price,
+                sid: sid,
+                uid: uid
+            } ,function (res) {
+                callback(res);
+            })
         }
     </script>
 @endsection

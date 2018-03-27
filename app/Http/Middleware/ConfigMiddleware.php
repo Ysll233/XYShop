@@ -18,7 +18,11 @@ class ConfigMiddleware
     public function handle($request, Closure $next)
     {
         if (Cache::has('config') !== true) {
-            $config = Config::find(1)->toArray();
+            try {
+                $config = Config::find(1)->toArray();
+            } catch (\Exception $e) {
+                dd($e);
+            }
             Cache::forever('config', $config);
         }
         return $next($request);

@@ -7,6 +7,7 @@ use App\Http\Controllers\Common\GoodSelect;
 use App\Models\Common\Article;
 use App\Models\Common\Cate;
 use App\Models\Good\Brand;
+use App\Models\Good\Cart;
 use App\Models\Good\Coupon;
 use App\Models\Good\Good;
 use App\Models\Good\GoodAttr;
@@ -148,6 +149,36 @@ class HomeController extends Controller
 
     public function getCategoryGood(GoodCate $cate)
     {
-        return ['success' => true, 'data' => Good::whereCateId($cate->id)->where('status', 1)->orderBy('sort', 'asc')->paginate(20)];
+        $users_id = session()->get('member')->id;
+        $goods = Good::whereCateId($cate->id)
+            ->where('status', 1)
+            ->where('prom_type', 0)
+            ->orderBy('sort', 'asc')
+            ->paginate(20);
+        $data = [];
+        foreach ($goods->items() as $item) {
+            $temp = [
+                'id' => $item->id,
+                'shop_price' => $item->shop_price,
+                'title' => $item->title,
+                'keyword' => $item->keyword,
+                'thumb' => $item->thumb,
+                'num' => 0,
+            ];
+            $userCartGood = Cart::whereUserId($users_id)->where('good_id', $item->id)->first();
+            if (!empty($userCartGood)) {
+                $temp['num'] = $userCartGood->nums;
+            }
+            $classfly = GoodCate::where('id', $item->cate_id)->first();
+            $temp['cate_name'] = $classfly->name;
+            array_push($data, $temp);
+        }
+
+        return ['success' => true, 'data' => [
+            'current_page' => $goods->currentPage(),
+            'last_page' => $goods->lastPage(),
+            'total' => $goods->total(),
+            'data' => $data
+        ]];
     }
 }

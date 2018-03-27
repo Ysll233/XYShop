@@ -37,7 +37,7 @@ class AjaxGoodController extends Controller
             $spec_key = $req->spec_key;
             $num = $req->num;
             $userid = $req->uid;
-            $new_price = $old_price = $req->gp;
+            $new_price = $old_price = $req->get('gp');
             $type = $req->input('type','');
             // 商品信息
             $good = Good::findOrFail($id);
@@ -91,6 +91,7 @@ class AjaxGoodController extends Controller
             }
             $this->ajaxReturn('1','加入购物车成功！');
         } catch (\Exception $e) {
+            logger($e);
             $this->ajaxReturn('0',$e->getMessage());
         }
     }
