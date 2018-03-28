@@ -178,7 +178,8 @@ class HomeController extends Controller
             'current_page' => $goods->currentPage(),
             'last_page' => $goods->lastPage(),
             'total' => $goods->total(),
-            'data' => $data
+            'data' => $data,
+            'cart' => Cart::computedAllGoodPrice($users_id)
         ]];
     }
 }

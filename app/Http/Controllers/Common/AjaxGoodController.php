@@ -89,7 +89,8 @@ class AjaxGoodController extends Controller
             {
                 Cart::create($a);
             }
-            $this->ajaxReturn('1','加入购物车成功！');
+
+            return ['code' => 1,'msg' => '添加购物车成功','cart' => Cart::computedAllGoodPrice($userid)];
         } catch (\Exception $e) {
             logger($e);
             $this->ajaxReturn('0',$e->getMessage());

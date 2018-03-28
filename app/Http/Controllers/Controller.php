@@ -24,6 +24,5 @@ class Controller extends BaseController
     public function ajaxReturn($code = '1',$msg = '')
     {
         exit(json_encode(['code'=>$code,'msg'=>$msg]));
-        return;
     }
 }

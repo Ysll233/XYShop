@@ -17,7 +17,8 @@
         .md-content {
             display: flex;
             position: absolute;
-            height: calc(100% - 1.3333rem - 57px)
+            height: calc(100% - 1.3333rem - 2.5rem);
+            width: 100%;
         }
         .md-content .category_list{
             width: 85px;
@@ -25,6 +26,7 @@
         }
         .md-content .md-product{
             width: 100%;
+            flex: 1;
             overflow-y: auto;
         }
     </style>
@@ -55,8 +57,11 @@
                 @endforeach
             </ul>
             <div class="md-product">
-                <ul class="product_ul" >
-                </ul>
+                <ul class="product_ul"></ul>
+                <div class="pos_foot pos_foot_cart product_result">
+                    <span class="cart_prices color_main">总额：￥<em class="cart_prices_num font_lg" id="total_price">0</em></span>
+                    <span class="show_btn_tosubmit">去结算<span class="font_sm">(<i class="cart_total_nums" id="total_num">0</i>件)</span></span>
+                </div>
             </div>
         </div>
     </section>
@@ -118,8 +123,15 @@
             $.get('/category/good/' + id, function (res) {
                 if (res.success !== true) return;
                 addProduct(res.data);
+                showCartData(res.data.cart);
                 categoryId = id;
             });
+        }
+
+        function showCartData (data) {
+            console.info(data);
+            $('#total_num').text(data.num);
+            $('#total_price').text(data.total_price);
         }
 
         function addProduct (data) {
@@ -137,7 +149,7 @@
     <a class="product_link">
         <div class="product-info">
             <p class="product_title">${item.title}</p>
-            <p><span class="iconfont">￥${item.shop_price}</span>/${item.keyword}</p>
+            <p><span>￥${item.shop_price}</span>/${item.keyword}</p>
         </div>
         <img src="${item.thumb}">
     </a>
@@ -161,7 +173,7 @@
             let li = el.parents('li');
             let gid = li.attr('data-id');
             let price = li.attr('data-price');
-            addCartGood(gid, num, price, function () {
+            addCartGood(gid, 1, price, function () {
                 span.text(num);
             });
         }
@@ -175,7 +187,12 @@
                 return
             }
             num--;
-            span.text(num);
+            let li = el.parents('li');
+            let gid = li.attr('data-id');
+            let price = li.attr('data-price');
+            addCartGood(gid,-1,price, function () {
+                span.text(num);
+            })
         }
 
         function addCartGood (gid, num, price, callback) {
@@ -187,7 +204,11 @@
                 sid: sid,
                 uid: uid
             } ,function (res) {
-                callback(res);
+                if (res.code === 1) {
+                    callback(res);
+                    showCartData(res.cart);
+                }
+                $('.alert_msg').text(res.msg).slideToggle().delay(1500).slideToggle();
             })
         }
     </script>

@@ -56,10 +56,10 @@ class Cart extends Model
     protected $guarded = [];
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $hidden = [];
     /**
      * 表明模型是否应该被打上时间戳
@@ -71,6 +71,17 @@ class Cart extends Model
     // 关联商品
     public function good()
     {
-        return $this->belongsTo('\App\Models\Good\Good','good_id','id');
+        return $this->belongsTo('\App\Models\Good\Good', 'good_id', 'id');
+    }
+
+    public static function computedAllGoodPrice($users_id)
+    {
+        $data = static::whereUserId($users_id)->get();
+        $result = ['num' => 0, 'total_price' => 0];
+        $data->each(function (Cart $cart) use (&$result) {
+            $result['num'] += $cart->nums;
+            $result['total_price'] += $cart->total_prices;
+        });
+        return $result;
     }
 }
