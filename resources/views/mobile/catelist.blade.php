@@ -1,12 +1,38 @@
 @extends('mobile.layout')
 
 @section('css')
+    <style>
+        html body {
+            overflow: auto !important;
+            height: 100%;
+        }
+        .md-container {
+            padding-top: 1.3333rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .md-content {
+            display: flex;
+            position: absolute;
+            height: calc(100% - 1.3333rem - 57px)
+        }
+        .md-content .category_list{
+            width: 85px;
+            overflow-y: auto;
+        }
+        .md-content .md-product{
+            width: 100%;
+            overflow-y: auto;
+        }
+    </style>
 @endsection
 
 @section('content')
-    @component('mobile.common.search',['issub'=>1])
-    @endcomponent
-    <section class="clearfix list_cate overh" style="overflow-y:visible">
+    @component('mobile.common.search',['issub'=>1]) @endcomponent
+    <section class="md-container">
         <div class="top-category">
             <i>&larrhk;</i>
             <ul class="show-case-bar">
@@ -20,16 +46,18 @@
             </ul>
             <i>&rarrhk;</i>
         </div>
-        <ul class="l_c_left f-l category_list">
-            @foreach($one as $o)
-                <li @if($o->id == $id) class="active"@endif>
-                    <a href="{{ url('catelist',['id'=>$o->id]) }}">{{ $o->mobilename }}</a>
-                </li>
-            @endforeach
-        </ul>
-        <div class="md-product" style="overflow-y: auto;height: 570px;">
-            <ul class="product_ul" >
+        <div class="md-content">
+            <ul class="category_list">
+                @foreach($one as $o)
+                    <li @if($o->id == $id) class="active"@endif>
+                        <a href="{{ url('catelist',['id'=>$o->id]) }}">{{ $o->mobilename }}</a>
+                    </li>
+                @endforeach
             </ul>
+            <div class="md-product">
+                <ul class="product_ul" >
+                </ul>
+            </div>
         </div>
     </section>
     @include('mobile.common.pos_menu')
