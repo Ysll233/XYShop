@@ -85,7 +85,7 @@
 }
 
 .product_ul {
-
+    margin-bottom: 57px;
 }
 
 .product_ul li {
@@ -154,4 +154,26 @@
     padding: 0 5px;
 }
 
-
+.show-case-bar .active {
+    color: white;
+    background-color: #90EE90;
+}
+.pos_foot {
+    margin-top: 4rem;
+}
+.tips {
+    background-color: #90EE90;
+}
+html {
+    overflow: hidden;
+}
+.product_title {
+    font-size: 14px;
+    width: 85%;
+}
+.pos_foot {
+    display: flex;
+}
+.pos_foot a {
+    flex: 1;
+}

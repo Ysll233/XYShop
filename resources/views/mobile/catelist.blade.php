@@ -12,7 +12,7 @@
             <ul class="show-case-bar">
                 @if(!empty($cates) && isset($cates[0]))
                     @foreach(app('tag')->catelist($cates[0]->id, 99) as $g)
-                        <li class="show-case-bar-item" data-id="{{$g->id}}">
+                        <li class="show-case-bar-item" data-id="{{$g->id}}" data-name="category_{{$g->id}}">
                             {{$g->mobilename}}
                         </li>
                     @endforeach
@@ -27,12 +27,11 @@
                 </li>
             @endforeach
         </ul>
-        <div class="md-product" style="height: 640px;overflow-y: auto;">
+        <div class="md-product" style="overflow-y: auto;height: 570px;">
             <ul class="product_ul" >
             </ul>
         </div>
     </section>
-    @include('mobile.common.footer')
     @include('mobile.common.pos_menu')
 @endsection
 
@@ -85,7 +84,9 @@
         }
 
         function getCategoryGood (id) {
+            $('.show-case-bar li').removeClass('active');
             products = null;
+            $(`li[data-name="category_${id}"]`).addClass('active');
             $.get('/category/good/' + id, function (res) {
                 if (res.success !== true) return;
                 addProduct(res.data);

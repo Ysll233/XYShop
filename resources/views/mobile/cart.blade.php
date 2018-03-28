@@ -3,7 +3,7 @@
 @section('content')
 
   <!-- 提示 -->
-  <div class="tips"><i class="iconfont icon-notification"></i>温馨提示：请仔细核对商品后结算订单！</div>
+  <div class="tips" style="background: #90EE90"><i class="iconfont icon-notification"></i>温馨提示：请仔细核对商品后结算订单！</div>
   <!-- 商品 -->
   <section class="sec_cart_goods bgc_f pd20 mt20 clearfix overh pr">
     <ul class="cart_good_select clearfix">
@@ -37,8 +37,6 @@
       @endforeach
     </ul>
   </section>
-  <!-- 底 -->
-  @include('mobile.common.footer')
   <!-- 固定底 -->
   <div class="pos_foot pos_foot_cart">
     <span class="cart_prices color_main">总额：￥<em class="cart_prices_num font_lg">{{ $total_prices }}</em></span>
