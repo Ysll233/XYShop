@@ -21,6 +21,7 @@ use App\Models\Good\Timetobuy;
 use App\Models\Good\Tuan;
 use App\Models\Good\TuanUser;
 use Illuminate\Http\Request;
+use App\Models\Good\Order;
 
 class HomeController extends Controller
 {
@@ -168,18 +169,27 @@ class HomeController extends Controller
             $userCartGood = Cart::whereUserId($users_id)->where('good_id', $item->id)->first();
             if (!empty($userCartGood)) {
                 $temp['num'] = $userCartGood->nums;
+                $temp['id'] = $userCartGood->id;
             }
             $classfly = GoodCate::where('id', $item->cate_id)->first();
             $temp['cate_name'] = $classfly->name;
             array_push($data, $temp);
         }
-
         return ['success' => true, 'data' => [
             'current_page' => $goods->currentPage(),
             'last_page' => $goods->lastPage(),
             'total' => $goods->total(),
             'data' => $data,
-            'cart' => Cart::computedAllGoodPrice($users_id)
+            'cart' => Cart::computedAllGoodPrice($users_id),
+            'cid' => Cart::getCartByUserId($users_id)->pluck('id')
         ]];
+    }
+
+    public function getCartId()
+    {
+        $users_id = session()->get('member')->id;
+        $ids = Cart::getCartByUserId($users_id)->pluck('id');
+        return ['success' => true, 'data' => $ids];
+
     }
 }

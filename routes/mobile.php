@@ -18,10 +18,14 @@ Route::get('lockget','Mobile\TestController@getLockget');
 Route::group(['namespace' => 'Mobile','middleware'=>'member'],function(){
     // 首页
     Route::get('/','HomeController@getIndex');
+
+    Route::get('cart/id', 'HomeController@getCartId');
     // 分类页面
     Route::get('catelist/{id?}','HomeController@getCatelist');
     // 商品列表
     Route::get('list/{id?}','HomeController@getList');
+    // 收藏商品
+    Route::resource('collect', 'UserCollectController');
     // 商品页面
     Route::get('good/{id}','HomeController@getGood');
     Route::get('category/good/{cate}','HomeController@getCategoryGood');

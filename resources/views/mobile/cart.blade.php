@@ -45,6 +45,7 @@
   <script>
     $(function(){
       // 取数量
+
       cartnum(uid);
       // 提交到结算页面
       $('.show_btn_tosubmit').on('click',function(){

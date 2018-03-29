@@ -61,6 +61,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereUserMoney($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\User whereUsername($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\UserCollect[] $collect
  */
 class User extends Model
 {
@@ -156,5 +157,10 @@ class User extends Model
     public function distribution_sun()
     {
         return $this->hasMany('\App\Models\Promotion\DistributionLog','sun_id','id');
+    }
+
+    public function collect()
+    {
+        return $this->hasMany(UserCollect::class, 'users_id', 'id');
     }
 }

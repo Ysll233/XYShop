@@ -78,7 +78,12 @@ class OrderController extends Controller
       }
   }
   // 提交订单
-  public function getCreateorder(Request $req)
+
+    /**
+     * @param Request $req
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getCreateorder(Request $req)
   {
     try {
       session()->forget('backurl');

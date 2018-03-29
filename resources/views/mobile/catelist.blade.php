@@ -75,6 +75,7 @@
         let sid = "{{ session()->getId() }}";
         let categoryId = null;
         let isLoadMore = false;
+
         $(document).ready(function () {
             initCategoryGood();
             $('.show-case-bar').delegate('li', 'click', function (e) {
@@ -95,7 +96,6 @@
                 let ul = $('.product_ul');
                 if (ul.height() - 10 < el.scrollTop() + el.height()) {
                     if (isLoadMore === false) {
-                        console.info('bottom');
                         isLoadMore = true;
                         let page = products.current_page + 1;
                         if (page > products.last_page ) return;
@@ -106,6 +106,28 @@
                         });
                     }
                 }
+            });
+            $('.show_btn_tosubmit').on('click', function () {
+                $.get('/cart/id', function (res)  {
+                    if (res.success !== true) return;
+                    let cid = '';
+                    $.each(res.data, function (index, item) {
+                        cid += item + '.';
+                    });
+                    $.post('/createorder', {cid: cid}, function (res) {
+                        res = jQuery.parseJSON(res);
+                        if (res.code === 1) {
+                            $('.alert_msg').text('提交成功！').slideToggle().delay(1500).slideToggle();
+                            setTimeout(function(){
+                                window.location.href = "{{ url('createorder') }}" + "?rid=" + res.msg;
+                            },1500);
+                        }
+                        else
+                        {
+                            $('.alert_msg').text(res.msg).slideToggle().delay(1500).slideToggle();
+                        }
+                    })
+                })
             })
         });
 
@@ -129,7 +151,6 @@
         }
 
         function showCartData (data) {
-            console.info(data);
             $('#total_num').text(data.num);
             $('#total_price').text(data.total_price);
         }
@@ -150,6 +171,7 @@
         <div class="product-info">
             <p class="product_title">${item.title}</p>
             <p><span>￥${item.shop_price}</span>/${item.keyword}</p>
+            <i class="fab fa-gratipay fa-2x" style="padding-top:5px;"></i>
         </div>
         <img src="${item.thumb}">
     </a>
@@ -177,6 +199,7 @@
                 span.text(num);
             });
         }
+
         function  removeBuyNum (el) {
             let span = el.prev();
             let num = parseInt(span.text());
@@ -202,7 +225,7 @@
                 num: num,
                 gp: price,
                 sid: sid,
-                uid: uid
+                uid: uid,
             } ,function (res) {
                 if (res.code === 1) {
                     callback(res);

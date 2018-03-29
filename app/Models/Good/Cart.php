@@ -77,11 +77,21 @@ class Cart extends Model
     public static function computedAllGoodPrice($users_id)
     {
         $data = static::whereUserId($users_id)->get();
-        $result = ['num' => 0, 'total_price' => 0];
+        $result = ['num' => 0, 'total_price' => 0, 'id' => 0];
         $data->each(function (Cart $cart) use (&$result) {
             $result['num'] += $cart->nums;
             $result['total_price'] += $cart->total_prices;
+            $result['id'] += $cart->id;
         });
         return $result;
+    }
+
+    /**
+     * @param $users_id
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
+     */
+    public static function getCartByUserId($users_id)
+    {
+        return static::whereUserId($users_id)->get();
     }
 }
