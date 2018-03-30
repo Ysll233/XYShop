@@ -6,6 +6,7 @@
     <title>{{ isset($title) ? $title.'-' : '' }}{{ cache('config')['title'] }}</title>
     <meta name="keywords" content="{{ isset($keyword) ? $keyword : cache('config')['keyword'] }}">
     <meta name="description" content="{{ isset($describe) ? $describe : cache('config')['describe'] }}">
+    <meta name="_token" content="">
     <!-- Bootstrap -->
     <link href="{{ $sites['static']}}mobile/css/iconfont.css" rel="stylesheet">
     <link href="{{url('css/style.css')}}" rel="stylesheet">
