@@ -55,6 +55,11 @@ class UserCollectController extends Controller
 
     public function destroy(UserCollect $collect)
     {
-        //
+        try {
+            if ($collect->delete()) {
+                return ['code' => 0, 'massage' => '删除成功'];
+            }
+        } catch (\Exception $e) {}
+        return ['code' => 2, 'massage' => ''];
     }
 }

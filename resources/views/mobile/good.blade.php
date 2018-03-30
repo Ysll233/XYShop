@@ -43,70 +43,18 @@
     </div>
     <p class="ti_title color_9">{{ $good->describe }}</p>
   </section>
-  <!-- 规格 -->
-  <section class="good_spec mt20 clearfix bgc_f pd20">
-    <h4 class="t4_show color_9">已选</h4>
-    <div class="g_s_info pos_show">
-      <span class="g_s_name"></span><span><i class="g_s_num">1</i>件</span>
-    </div>
-  </section>
-  <!-- 领券 -->
-  <section class="good_coupon mt20 clearfix bgc_f pd20">
-    <h4 class="t4_show color_9">领券</h4>
-    <ul class="list_coupon mt20 clearfix">
-      @foreach($coupon as $c)
-      <li>
-        <span class="l_c_price f-l">￥{{ $c->lessprice }}</span>
-        <span class="l_c_btn f-r" data-cid="{{ $c->id }}">领取</span>
-        <span class="l_c_info f-l">满{{ $c->price }}可用</span>
-      </li>
-      @endforeach
-      <script>
-        $(function(){
-          $('.l_c_btn').click(function(){
-            if(!ajaxLock)return false;
-            var cid = $(this).attr('data-cid');
-            var url = "{{ url('api/coupon/get') }}";
-            ajaxLock = 0;
-            $.post(url,{cid:cid,uid:uid},function(d){
-              var ss = jQuery.parseJSON(d);
-              if (ss.code == '1') {
-                // console.log(ss);
-                $('.alert_msg').text(ss.msg).slideToggle().delay(1500).slideToggle();
-              }
-              else
-              {
-                $('.alert_msg').text(ss.msg).slideToggle().delay(1500).slideToggle();
-              }
-              ajaxLock = 1;
-              return;
-            }).error(function() {
-              ajaxLock = 1;
-              return;
-            });
-          });
-        })
-      </script>
-    </ul>
-  </section>
-  <!-- ad -->
-  <div class="ads mt20">
-    @foreach(app('tag')->ad(4,1,1) as $k => $c)
-      <a href="{{ $c->url }}"><img src="{{ $c->thumb }}" width="570" height="180" alt="{{ $c->title }}"></a>
-    @endforeach
-  </div>
-  <!-- 店 -->
-  {{--<section class="sec_dian bgc_f clearfix mt20 overh pd20">--}}
-    {{--<a href="{{ url('/') }}" class="s_d_logo f-l"><img src="{{ $sites['static']}}mobile/images/logo_s.png" width="180" height="60" alt=""></a>--}}
-    {{--<div class="s_d_info">--}}
-      {{--<h2><a href="{{ url('/') }}">ThinkPad京东官方旗舰店</a></h2>--}}
-      {{--<p><a href="{{ url('/') }}">最好的手机电脑官方商城</a></p>--}}
+  {{--<!-- 规格 -->--}}
+  {{--<section class="good_spec mt20 clearfix bgc_f pd20">--}}
+    {{--<h4 class="t4_show color_9">已选</h4>--}}
+    {{--<div class="g_s_info pos_show">--}}
+      {{--<span class="g_s_name"></span><span><i class="g_s_num">1</i>件</span>--}}
     {{--</div>--}}
   {{--</section>--}}
-  <!-- 详情 -->
-  <section class="clearfix overh sec_show pd20 bgc_f">
-    {!! $good->content !!}
-  </section>
+
+
+  {{--<section class="clearfix overh sec_show pd20 bgc_f">--}}
+    {{--{!! $good->content !!}--}}
+  {{--</section>--}}
 
   <!-- 规格选项 -->
   <div class="pos_bg hidden"></div>
@@ -257,9 +205,8 @@
     </script>
   </div>
   <!-- 底 -->
-  @include('mobile.common.footer')
   <div class="pos_foot">
-    <a href="{{ url('/') }}" class="p_f_link iconfont icon-home"><em>首页</em></a>
+    <a href="{{ url('/catelist') }}" class="p_f_link iconfont icon-home"><em>首页</em></a>
     <a href="{{ url('cart') }}" class="p_f_link iconfont icon-cart"><em>购物车</em></a>
     <span class="btn-createorder">直接购买</span>
     <span class="btn-addcart">加入购物车</span>

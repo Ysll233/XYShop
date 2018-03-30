@@ -49,7 +49,7 @@
       cartnum(uid);
       // 提交到结算页面
       $('.show_btn_tosubmit').on('click',function(){
-        if(ajaxLock == 0)return false;
+        if(ajaxLock === 0)return false;
         var cid = '.';
         $('.cart_checkbox').each(function(){
           var that = $(this);
@@ -62,7 +62,7 @@
         ajaxLock = 0;
         $.post(host+'createorder',{cid:cid},function(d){
           var ss = jQuery.parseJSON(d);
-          if (ss.code == 1) {
+          if (ss.code === 1) {
             $('.alert_msg').text('提交成功！').slideToggle().delay(1500).slideToggle();
             setTimeout(function(){
               window.location.href = "{{ url('createorder') }}" + "?rid=" + ss.msg;
