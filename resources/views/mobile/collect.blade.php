@@ -59,8 +59,8 @@
                 type: 'delete',
                 dataType: 'json',
                 data: {},
-                success: function (res) {
-                    console.info(res);
+                success: function () {
+                    location.reload();
                 }
             });
         });
