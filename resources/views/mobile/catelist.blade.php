@@ -135,7 +135,7 @@
                             $('.alert_msg').text('提交成功！').slideToggle().delay(1500).slideToggle();
                             setTimeout(function () {
                                 window.location.href = "{{ url('createorder') }}" + '?rid=' + res.msg;
-                            }, 1500);
+                            }, 1500)
                         }
                         else {
                             $('.alert_msg').text(res.msg).slideToggle().delay(1500).slideToggle();
