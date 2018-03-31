@@ -20,6 +20,7 @@ use App\Models\Good\Promotion;
 use App\Models\Good\Timetobuy;
 use App\Models\Good\Tuan;
 use App\Models\Good\TuanUser;
+use App\Models\User\UserCollect;
 use Illuminate\Http\Request;
 use App\Models\Good\Order;
 
@@ -32,15 +33,17 @@ class HomeController extends Controller
      */
     public function getIndex()
     {
-        try {
-            $pos_id = 'home';
-            $title = '首页';
-            $wechat_js = app('wechat.official_account')->jssdk;
-            return view(cache('config')['theme'] . '.index', compact('pos_id', 'title', 'wechat_js'));
-        } catch (\Exception $e) {
-            dd($e);
-            return view('errors.404');
-        }
+//        try {
+//            $pos_id = 'home';
+//            $title = '首页';
+//            $wechat_js = app('wechat.official_account')->jssdk;
+//            return view(cache('config')['theme'] . '.index', compact('pos_id', 'title', 'wechat_js'));
+//        } catch (\Exception $e) {
+//            dd($e);
+//            return view('errors.404');
+//        }
+
+        return redirect('/catelist');
     }
 
     /*
@@ -172,6 +175,15 @@ class HomeController extends Controller
                 $temp['id'] = $userCartGood->id;
             }
             $classfly = GoodCate::where('id', $item->cate_id)->first();
+
+            $collect = UserCollect::whereUsersId($users_id)->where('goods_id', $item->id)->first();
+
+            if (empty($collect)) {
+                $temp['is_collect'] = false;
+            } else {
+                $temp['is_collect'] = true;
+            }
+
             $temp['cate_name'] = $classfly->name;
             array_push($data, $temp);
         }
@@ -189,6 +201,9 @@ class HomeController extends Controller
     {
         $users_id = session()->get('member')->id;
         $ids = Cart::getCartByUserId($users_id)->pluck('id');
+        if ($ids->isEmpty()) {
+            return ['success' => false, 'data' => '购物车是空的'];
+        }
         return ['success' => true, 'data' => $ids];
 
     }

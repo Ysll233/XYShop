@@ -14,8 +14,6 @@
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="{{ $sites['static']}}common/js/lazyload.min.js"></script>
     <script src="{{ $sites['static']}}mobile/js/jquery.touchslider.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
-    <!-- 公用js文件 -->
     <script>
        var host = "{{ config('app.url') }}/";
        var ajaxLock = true;

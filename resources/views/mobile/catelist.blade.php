@@ -6,6 +6,7 @@
             overflow: auto !important;
             height: 100%;
         }
+
         .md-container {
             padding-top: 1.3333rem;
             position: fixed;
@@ -14,20 +15,27 @@
             width: 100%;
             height: 100%;
         }
+
         .md-content {
             display: flex;
             position: absolute;
             height: calc(100% - 1.3333rem - 2.5rem);
             width: 100%;
         }
-        .md-content .category_list{
+
+        .md-content .category_list {
             width: 85px;
             overflow-y: auto;
         }
-        .md-content .md-product{
+
+        .md-content .md-product {
             width: 100%;
             flex: 1;
             overflow-y: auto;
+        }
+
+        .iconfont.icon-like.active_true {
+            color: red;
         }
     </style>
 @endsection
@@ -87,8 +95,15 @@
                 let el = $(e.target);
                 let type = el.attr('data-type');
                 switch (type) {
-                    case 'add': addBuyNum(el);break;
-                    case 'remove': removeBuyNum(el); break;
+                    case 'add':
+                        addBuyNum(el);
+                        break;
+                    case 'remove':
+                        removeBuyNum(el);
+                        break;
+                    case 'collect':
+                        collectGoods(el);
+                        break;
                 }
             });
             $('.md-product').scroll(function (e) {
@@ -98,7 +113,7 @@
                     if (isLoadMore === false) {
                         isLoadMore = true;
                         let page = products.current_page + 1;
-                        if (page > products.last_page ) return;
+                        if (page > products.last_page) return;
                         $.get('/category/good/' + categoryId, {page: page}, function (res) {
                             if (res.success !== true) return;
                             addProduct(res.data);
@@ -108,8 +123,8 @@
                 }
             });
             $('.show_btn_tosubmit').on('click', function () {
-                $.get('/cart/id', function (res)  {
-                    if (res.success !== true) return;
+                $.get('/cart/id', function (res) {
+                    if (res.success !== true) return $('.alert_msg').text(res.data).slideToggle().delay(1500).slideToggle();;
                     let cid = '';
                     $.each(res.data, function (index, item) {
                         cid += item + '.';
@@ -118,17 +133,16 @@
                         res = jQuery.parseJSON(res);
                         if (res.code === 1) {
                             $('.alert_msg').text('提交成功！').slideToggle().delay(1500).slideToggle();
-                            setTimeout(function(){
-                                window.location.href = "{{ url('createorder') }}" + "?rid=" + res.msg;
-                            },1500);
+                            setTimeout(function () {
+                                window.location.href = "{{ url('createorder') }}" + '?rid=' + res.msg;
+                            }, 1500);
                         }
-                        else
-                        {
+                        else {
                             $('.alert_msg').text(res.msg).slideToggle().delay(1500).slideToggle();
                         }
-                    })
-                })
-            })
+                    });
+                });
+            });
         });
 
         function initCategoryGood () {
@@ -155,6 +169,29 @@
             $('#total_price').text(data.total_price);
         }
 
+        function collectGoods (el) {
+            el = $(el);
+            let li = el.parents('li');
+            let goods_id = li.attr('data-id');
+            if (el.hasClass('active_true')) {
+                $.post('/un/collect/' + goods_id, {}, function (res) {
+                    if (res.success === true) {
+                        el.removeClass('active_true');
+                        el.addClass('active_false');
+                    }
+                    $('.alert_msg').text(res.data).slideToggle().delay(1500).slideToggle();
+                })
+            } else {
+                $.post('/collect', {goods_id: goods_id}, function (res) {
+                    if (res.success === true) {
+                        el.removeClass('active_false');
+                        el.addClass('active_true');
+                    }
+                    $('.alert_msg').text(res.data).slideToggle().delay(1500).slideToggle();
+                });
+            }
+        }
+
         function addProduct (data) {
             if (products === null) {
                 products = data;
@@ -166,26 +203,26 @@
             let html = '';
             $.each(products.data, function (index, item) {
                 html +=
-`<li class="product_li" data-id="${item.id}" data-price="${item.shop_price}">
+                    `<li class="product_li" data-id="${item.id}" data-price="${item.shop_price}">
     <a class="product_link">
         <div class="product-info">
             <p class="product_title">${item.title}</p>
             <p><span>￥${item.shop_price}</span>/${item.keyword}</p>
-            <i class="fab fa-gratipay fa-2x" style="padding-top:5px;"></i>
         </div>
         <img src="${item.thumb}">
     </a>
     <div class="product-action">
+        <button data-type='collect' class="iconfont icon-like active_${item.is_collect}"></button>
         <button data-type="add">+</button>
         <span>${item.num}</span>
         <button data-type="remove">-</button>
     </div>
-</li>`
+</li>`;
             });
-            $('.product_ul').html(html)
+            $('.product_ul').html(html);
         }
 
-        function  addBuyNum (el) {
+        function addBuyNum (el) {
             let span = el.next();
             let num = parseInt(span.text());
             if (isNaN(num)) {
@@ -200,22 +237,22 @@
             });
         }
 
-        function  removeBuyNum (el) {
+        function removeBuyNum (el) {
             let span = el.prev();
             let num = parseInt(span.text());
             if (isNaN(num)) {
                 num = 0;
             }
             if (num <= 0) {
-                return
+                return;
             }
             num--;
             let li = el.parents('li');
             let gid = li.attr('data-id');
             let price = li.attr('data-price');
-            addCartGood(gid,-1,price, function () {
+            addCartGood(gid, -1, price, function () {
                 span.text(num);
-            })
+            });
         }
 
         function addCartGood (gid, num, price, callback) {
@@ -225,14 +262,14 @@
                 num: num,
                 gp: price,
                 sid: sid,
-                uid: uid,
-            } ,function (res) {
+                uid: uid
+            }, function (res) {
                 if (res.code === 1) {
                     callback(res);
                     showCartData(res.cart);
                 }
                 $('.alert_msg').text(res.msg).slideToggle().delay(1500).slideToggle();
-            })
+            });
         }
     </script>
 @endsection

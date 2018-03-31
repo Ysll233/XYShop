@@ -25,7 +25,8 @@ Route::group(['namespace' => 'Mobile','middleware'=>'member'],function(){
     // 商品列表
     Route::get('list/{id?}','HomeController@getList');
     // 收藏商品
-    Route::resource('collect', 'UserCollectController');
+    Route::apiResource('collect', 'UserCollectController');
+    Route::post('un/collect/{goods_id}', 'UserCollectController@unCollect');
     // 商品页面
     Route::get('good/{id}','HomeController@getGood');
     Route::get('category/good/{cate}','HomeController@getCategoryGood');
